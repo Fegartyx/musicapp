@@ -2,16 +2,20 @@
 
 ### pip freeze > requirements.txt
 
-## Than you can activate venv
+## First install venv
 
 ### python -m venv venv
 
-### source venv/bin/activate # or .\venv\Scripts\Activate on Windows
+## than activate venv
 
-### pip install -r requirements.txt
+### source venv/bin/activate
 
-## For running Server use 
+## than install all lib on requirements.text
+
+### pip install -r requirements.text
+
+## For running Server use
 
 ### fastapi dev main.py
 
-## Python v 3.8
+## Python v 3.11 +
