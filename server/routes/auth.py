@@ -33,7 +33,7 @@ def login(user: UserLogin ,db: Session = Depends(get_db)):
     # check if user has email
     user_db = db.query(User).filter(User.email == user.email).first()
     
-    if not user:
+    if not user_db:
         raise HTTPException(status_code=400, detail="Email not registered, please Sign Up")
     
     # password is matching or not
