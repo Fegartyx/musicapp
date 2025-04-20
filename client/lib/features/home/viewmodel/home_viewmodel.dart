@@ -9,6 +9,7 @@ import 'package:client/features/home/repositories/home_local_repository.dart';
 import 'package:client/features/home/repositories/home_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'home_viewmodel.g.dart';
 
 @riverpod

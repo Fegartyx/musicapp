@@ -8,9 +8,10 @@ import cloudinary
 import cloudinary.uploader
 import os
 from dotenv import load_dotenv
-from cloudinary.utils import cloudinary_url
-
+from sqlalchemy.orm import joinedload
+from models.favorite import Favorite
 from models.song import Song
+from pydantic_schemas.song.favorite_song import FavoriteSchema, FavoriteSong
 from pydantic_schemas.song.song_upload import SongUpload
 
 router = APIRouter()
@@ -31,7 +32,7 @@ def upload_song(song: UploadFile = File(...),
     thumbnail: UploadFile = File(...),
     artist: str = Form(...),
     song_name: str = Form(...),
-    hex_code: str = Form(...), db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token)):
+    hex_code: str = Form(...), db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token),):
     try: 
         song_id = str(uuid.uuid4())
         song_res = cloudinary.uploader.upload(song.file, resource_type="auto", folder=f"songs/{song_id}")
@@ -57,3 +58,29 @@ def upload_song(song: UploadFile = File(...),
 @router.get('/list', response_model=List[SongUpload])
 def list_songs(db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token)):
     return db.query(Song).all()
+
+@router.get('/list/favorites', response_model=List[FavoriteSchema])
+def list_fav_song(db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token)):
+    user_id = user_dict['id']
+    
+    favorites = db.query(Favorite).filter(Favorite.user_id == user_id).options(joinedload(Favorite.song)).all()
+
+    return favorites
+    
+@router.post('/favorite')
+def favorite_song(song: FavoriteSong ,db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token)):
+    user_id = user_dict['id']
+    
+    print(user_id)
+    
+    fav_song = db.query(Favorite).filter(Favorite.song_id == song.song_id, Favorite.user_id == user_id).first()
+    
+    if fav_song:
+        db.delete(fav_song)
+        db.commit()
+        return {"message": False}
+    else:
+        new_fav = Favorite(id=str(uuid.uuid4()), song_id=song.song_id, user_id=user_id)
+        db.add(new_fav)
+        db.commit()
+        return {'message': True}

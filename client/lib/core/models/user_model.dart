@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:client/features/home/models/fav_song_model.dart';
+import 'package:client/features/home/models/song_model.dart';
 
 class UserModel {
   final String name;
@@ -53,7 +54,7 @@ class UserModel {
       token: map['token'] ?? '',
       favorites: List<FavSongModel>.from(
         (map['favorites'] ?? []).map(
-          (x) => FavSongModel.fromMap(x as Map<String, dynamic>),
+          (x) => SongModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );

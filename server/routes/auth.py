@@ -2,9 +2,11 @@ import uuid, bcrypt
 from fastapi import Depends, HTTPException, APIRouter
 from databases import get_db
 from middleware.auth_middleware import auth_middleware_token
+from models.favorite import Favorite
 from models.user import User
 from pydantic_schemas.user.user_create import UserCreate, UserResponse
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 import jwt
 
 from pydantic_schemas.user.user_login import UserBaseResponse, UserLogin, UserLoginResponse
@@ -50,11 +52,14 @@ def login(user: UserLogin ,db: Session = Depends(get_db)):
     
     # return UserLoginResponse(token=token,email=user_db.email,name=user_db.name,id=user_db.id)
 
-@router.get('/', response_model=UserLoginResponse)
+# @router.get('/', response_model=UserLoginResponse)
+@router.get('/')
 def get_user(db: Session = Depends(get_db), user_dict = Depends(auth_middleware_token)):
-    user = db.query(User).filter(User.id == user_dict['id']).first()
+    # user = db.query(User).filter(User.id == user_dict['id']).options(joinedload(User.favorite).joinedload(Favorite.song)).first()
+    user = db.query(User).filter(User.id == user_dict['id']).options(joinedload(User.favorite)).first()
     
     if not user:
         raise HTTPException(404, "User Not Found")
     
-    return UserLoginResponse(token=user_dict['x-auth-token'],user=user)
+    # return UserLoginResponse(token=user_dict['x-auth-token'],user=user)
+    return {"token": user_dict['x-auth-token'], "user": user}

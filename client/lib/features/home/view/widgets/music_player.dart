@@ -135,70 +135,70 @@ class MusicPlayer extends ConsumerWidget {
                         final position = snapshot.data;
                         final duration = songNotifier.audioPlayer!.duration;
 
-                        return StatefulBuilder(
-                          builder: (context, setState) {
-                            if (!isUserSeeking && position != null && duration != null) {
-                              sliderValue =
-                                  position.inMilliseconds / duration.inMilliseconds;
-                            }
-                            return Column(
-                              children: [
-                                SliderTheme(
-                                  data: SliderTheme.of(context).copyWith(
-                                    activeTrackColor: Pallete.whiteColor,
-                                    inactiveTrackColor:
-                                        Pallete.whiteColor.withOpacity(0.117),
-                                    thumbColor: Pallete.whiteColor,
-                                    trackHeight: 4,
-                                    overlayShape: SliderComponentShape.noOverlay,
-                                  ),
-                                  child: Slider(
-                                    value: sliderValue,
-                                    min: 0,
-                                    max: 1,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        sliderValue = val;
-                                        isUserSeeking = true;
-                                      });
-                                    },
-                                    onChangeEnd: (value) {
-                                      setState(() {
-                                        isUserSeeking = false;
-                                      });
-                                      songNotifier.seek(value);
-                                    },
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      // '${position?.inMinutes}:${(position?.inSeconds ?? 0) < 10 ? '0${position?.inSeconds}' : position?.inSeconds}',
-                                      // '${position.inMinutes}:${position.inSeconds}',
-                                      formatDuration(position!),
-                                      style: const TextStyle(
-                                        color: Pallete.subtitleText,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    const Expanded(child: SizedBox()),
-                                    Text(
-                                      // '${duration?.inMinutes}:${(duration?.inSeconds ?? 0) < 10 ? '0${duration?.inSeconds}' : duration?.inSeconds}',
-                                      // '${duration.inMinutes}:${duration.inSeconds}',
-                                      formatDuration(duration!),
-                                      style: const TextStyle(
-                                        color: Pallete.subtitleText,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
+                        return StatefulBuilder(builder: (context, setState) {
+                          if (!isUserSeeking &&
+                              position != null &&
+                              duration != null) {
+                            sliderValue = position.inMilliseconds /
+                                duration.inMilliseconds;
                           }
-                        );
+                          return Column(
+                            children: [
+                              SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  activeTrackColor: Pallete.whiteColor,
+                                  inactiveTrackColor:
+                                      Pallete.whiteColor.withOpacity(0.117),
+                                  thumbColor: Pallete.whiteColor,
+                                  trackHeight: 4,
+                                  overlayShape: SliderComponentShape.noOverlay,
+                                ),
+                                child: Slider(
+                                  value: sliderValue,
+                                  min: 0,
+                                  max: 1,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      sliderValue = val;
+                                      isUserSeeking = true;
+                                    });
+                                  },
+                                  onChangeEnd: (value) {
+                                    setState(() {
+                                      isUserSeeking = false;
+                                    });
+                                    songNotifier.seek(value);
+                                  },
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    // '${position?.inMinutes}:${(position?.inSeconds ?? 0) < 10 ? '0${position?.inSeconds}' : position?.inSeconds}',
+                                    // '${position.inMinutes}:${position.inSeconds}',
+                                    formatDuration(position!),
+                                    style: const TextStyle(
+                                      color: Pallete.subtitleText,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  Text(
+                                    // '${duration?.inMinutes}:${(duration?.inSeconds ?? 0) < 10 ? '0${duration?.inSeconds}' : duration?.inSeconds}',
+                                    // '${duration.inMinutes}:${duration.inSeconds}',
+                                    formatDuration(duration!),
+                                    style: const TextStyle(
+                                      color: Pallete.subtitleText,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        });
                       }),
                   const SizedBox(height: 15),
                   Row(
