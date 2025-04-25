@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  musicserver:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: musicserver
+    ports:
+      - "8000:80"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./app:/code/app
+    restart: unless-stopped
+
+  db:
+    image: postgres:latest
+    container_name: musicserver_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
