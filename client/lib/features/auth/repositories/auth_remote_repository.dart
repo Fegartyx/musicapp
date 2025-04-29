@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:client/core/constants/server_constant.dart';
 import 'package:client/core/failure/failure.dart';
 import 'package:client/core/models/user_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -35,6 +36,7 @@ class AuthRemoteRepository {
           },
         ),
       );
+      debugPrint('Response: ${response.statusCode} ${response.body}');
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
 
       if (response.statusCode != 201) {

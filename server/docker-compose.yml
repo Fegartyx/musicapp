@@ -5,6 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    image: muhammadferari/musicserver:latest
     container_name: musicserver
     ports:
       - "8000:80"
@@ -13,7 +14,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./app:/code/app
+      - ./app:/code/appa
     restart: unless-stopped
 
   db:

@@ -2,6 +2,7 @@ import 'package:client/core/models/user_model.dart';
 import 'package:client/core/providers/current_user_notifier.dart';
 import 'package:client/features/auth/repositories/auth_local_repository.dart';
 import 'package:client/features/auth/repositories/auth_remote_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -36,6 +37,8 @@ class AuthViewModel extends _$AuthViewModel {
       email: email,
       password: password,
     );
+
+    debugPrint('Response: $res');
 
     final val = switch (res) {
       Left(value: final l) => state = AsyncValue.error(
