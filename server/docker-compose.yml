@@ -2,11 +2,14 @@ version: "3.9"
 
 services:
   musicserver:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     image: muhammadferari/musicserver:latest
     container_name: musicserver
+    environment:
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
     ports:
       - "8000:80"
     env_file:
