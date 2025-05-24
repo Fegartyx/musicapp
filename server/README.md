@@ -19,3 +19,12 @@
 ### fastapi dev main.py
 
 ## Python v 3.11 +
+
+## Set Docker compose and Docker Swarm
+
+ketik ini di terminal
+echo -n "isi_api_key_cloudinary" | docker secret create cloudinary_api_key -
+echo -n "isi_api_secret_cloudinary" | docker secret create cloudinary_api_secret -
+echo -n "postgres_user" | docker secret create db_user -
+echo -n "postgres_password" | docker secret create db_password -
+echo -n "nama_database" | docker secret create db_name -

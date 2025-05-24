@@ -1,15 +1,25 @@
 from dotenv import load_dotenv
 import os
+from pathlib import Path as FilePath
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
-db_user = os.getenv("DB_USER")
-db_pass = os.getenv("DB_PASSWORD")
+# Helper function to read Docker secrets
+def read_secret(secret_name: str) -> str:
+    path = FilePath(f"/run/secrets/{secret_name}")
+    if path.exists():
+        return path.read_text().strip()
+    return os.getenv(secret_name)
+
+db_user = read_secret("db_user")
+db_pass = read_secret("db_password")
 db_name = os.getenv("DB_NAME")
 db_port = os.getenv("DB_PORT", "5432")
-db_host = os.getenv("DB_HOST", "localhost")
+db_host = os.getenv("DB_HOST", "db")
+
+print("DEBUG: db_user =", db_user, flush=True)
 
 DATABASES = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
 

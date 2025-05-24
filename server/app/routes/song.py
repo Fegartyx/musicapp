@@ -2,12 +2,10 @@ from typing import List
 import uuid
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
-from databases import get_db
+from databases import get_db, read_secret
 from middleware.auth_middleware import auth_middleware_token
 import cloudinary
 import cloudinary.uploader
-import os
-from dotenv import load_dotenv
 from sqlalchemy.orm import joinedload
 from models.favorite import Favorite
 from models.song import Song
@@ -16,12 +14,10 @@ from pydantic_schemas.song.song_upload import SongUpload
 
 router = APIRouter()
 
-load_dotenv()
-
 cloudinary.config( 
     cloud_name = "dp02jdtje", 
-    api_key = os.getenv("CLOUDINARY_API_KEY"), 
-    api_secret = os.getenv("CLOUDINARY_API_SECRET"), # Click 'View API Keys' above to copy your API secret
+    api_key = read_secret("CLOUDINARY_API_KEY"), 
+    api_secret = read_secret("CLOUDINARY_API_SECRET"), # Click 'View API Keys' above to copy your API secret
     secure=True
 )
 

@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  musicserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: muhammadferari/musicserver:latest
+    container_name: musicserver
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    secrets:
+      - cloudinary_api_key
+      - cloudinary_api_secret
+      - db_user
+      - db_password
+    env_file:
+      - .env
+    volumes:
+      - ./app:/code/app
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
+
+  db:
+    image: postgres:latest
+    container_name: musicserver_db
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/db_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB: ${DB_NAME}
+    secrets:
+      - db_user
+      - db_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
+
+secrets:
+  cloudinary_api_key:
+    external: true
+  cloudinary_api_secret:
+    external: true
+  db_user:
+    external: true
+  db_password:
+    external: true
+
+volumes:
+  postgres_data:
